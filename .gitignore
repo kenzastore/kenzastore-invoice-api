@@ -1,0 +1,70 @@
+# Dependencies
+vendor/
+composer.lock
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# PDF invoices (these are generated files)
+invoices/*.pdf
+!invoices/*.pdf.example
+
+# Logo images (if they contain sensitive data)
+invoices/logos/*.png
+invoices/logos/*.jpg
+invoices/logos/*.jpeg
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Cache
+cache/
+*.cache
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+
+# Uploaded files
+uploads/
+files/
+
+# Configuration files (may contain sensitive data)
+config/production.php
+config/database_prod.php
+
+# Test files that may contain real data
+test_*.pdf
+debug_*.html
+test_*.sql
+
+# Build artifacts
+dist/
+build/
+
+zip/
+*.zip

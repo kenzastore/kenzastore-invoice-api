@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Invoice API Tester - FIXED</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+
+        input,
+        textarea {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .success {
+            color: green;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            color: red;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            color: #0c5460;
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .debug-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .credentials-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d7ff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Invoice Management API Tester - DEBUG VERSION</h1>
+
+        <div class="credentials-info">
+            <h3>🔑 Available Test Credentials</h3>
+            <p><strong>Option 1:</strong> Email: <code>apitest@example.com</code>, Password: <code>password123</code>
+            </p>
+            <p><strong>Option 2:</strong> Email: <code>test@example.com</code>, Password: <code>password</code></p>
+            <p><strong>Option 3:</strong> Email: <code>karel.it@ydsf.org</code>, Password: <code>password</code></p>
+            <p><strong>Option 4:</strong> Email: <code>kenzastoreid@gmail.com</code>, Password: <code>password</code>
+            </p>
+            <p><em>Note: Use Option 1 if you've run the SQL fix. Use Options 2-4 if the users are verified in your
+                    database.</em></p>
+        </div>
+
+        <!-- Login Section -->
+        <div class="section">
+            <h2>1. Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email" value="apitest@example.com">
+            <input type="password" id="loginPassword" placeholder="Password" value="password123">
+            <button onclick="login()">Login</button>
+            <div id="loginResult"></div>
+        </div>
+
+        <!-- Token Display -->
+        <div class="section">
+            <h2>Current Token</h2>
+            <input type="text" id="currentToken" placeholder="Token will appear here after login" readonly>
+            <button onclick="clearToken()">Clear Token</button>
+        </div>
+
+        <!-- Debug Section -->
+        <div class="debug-section">
+            <h3>🔧 Debug Info</h3>
+            <p><strong>API Base URL:</strong> <code id="apiBaseDisplay"></code></p>
+            <p><strong>Connection Status:</strong> <span id="connectionStatus">Not tested</span></p>
+            <button onclick="testConnection()">Test API Connection</button>
+        </div>
+
+        <!-- List Invoices -->
+        <div class="section">
+            <h2>2. List Invoices</h2>
+            <input type="number" id="page" placeholder="Page" value="1">
+            <input type="number" id="limit" placeholder="Limit" value="10">
+            <button onclick="listInvoices()">Get Invoices</button>
+            <div id="listResult"></div>
+        </div>
+
+        <script>
+            const API_BASE = 'https://inv.kenzastore.my.id/api/index.php';
+            let token = '';
+
+            // Set API base URL display
+            document.getElementById('apiBaseDisplay').textContent = API_BASE;
+
+            // Set default dates on page load
+            window.addEventListener('DOMContentLoaded', function () {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('invoiceDate').value = today;
+                document.getElementById('dueDate').value = today;
+            });
+
+            function displayResult(elementId, message, isError = false) {
+                const element = document.getElementById(elementId);
+                element.innerHTML = `<pre>${message}</pre>`;
+                element.className = isError ? 'error' : 'success';
+            }
+
+            function displayInfo(elementId, message) {
+                const element = document.getElementById(elementId);
+                element.innerHTML = `<pre>${message}</pre>`;
+                element.className = 'info';
+            }
+
+            async function testConnection() {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.textContent = 'Testing...';
+
+                try {
+                    const response = await fetch(API_BASE + '/test', {
+                        method: 'GET'
+                    });
+
+                    if (response.ok) {
+                        statusEl.textContent = '✅ API is accessible';
+                        statusEl.className = 'success';
+                    } else {
+                        statusEl.textContent = `⚠️ API returned ${response.status}`;
+                        statusEl.className = 'error';
+                    }
+                } catch (error) {
+                    statusEl.textContent = `❌ Connection failed: ${error.message}`;
+                    statusEl.className = 'error';
+                }
+            }
+
+            async function login() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                if (!email || !password) {
+                    displayResult('loginResult', '❌ Email and password are required!', true);
+                    return;
+                }
+
+                displayInfo('loginResult', '🔄 Logging in...');
+
+                try {
+                    const response = await fetch(API_BASE + '/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+
+                    const responseText = await response.text();
+                    console.log('Raw response:', responseText);
+
+                    let data;
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (e) {
+                        displayResult('loginResult', `❌ Invalid JSON response: ${responseText}`, true);
+                        return;
+                    }
+
+                    displayResult('loginResult', JSON.stringify(data, null, 2));
+
+                    if (data.status === 'success' && data.token) {
+                        token = data.token;
+                        document.getElementById('currentToken').value = token;
+                        displayResult('loginResult', `✅ Login successful!\nToken: ${token}`, false);
+                    } else {
+                        displayResult('loginResult', `❌ Login failed: ${data.message || 'Unknown error'}`, true);
+                    }
+                } catch (error) {
+                    displayResult('loginResult', `❌ Network error: ${error.message}`, true);
+                }
+            }
+
+            function clearToken() {
+                token = '';
+                document.getElementById('currentToken').value = '';
+                displayInfo('loginResult', 'Token cleared');
+            }
+
+            async function listInvoices() {
+                const page = document.getElementById('page').value;
+                const limit = document.getElementById('limit').value;
+
+                if (!token) {
+                    displayResult('listResult', '❌ Please login first!', true);
+                    return;
+                }
+
+                displayInfo('listResult', 'Loading invoices...');
+
+                try {
+                    const response = await fetch(API_BASE + `/invoices?page=${page}&limit=${limit}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    displayResult('listResult', JSON.stringify(data, null, 2), data.status !== 'success');
+                } catch (error) {
+                    displayResult('listResult', `❌ Error: ${error.message}`, true);
+                }
+            }
+        </script>
+    </div>
+</body>
+
+</html>

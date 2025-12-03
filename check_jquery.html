@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jQuery Check</title>
+</head>
+
+<body>
+    <h1>jQuery Loading Check</h1>
+    <div id="status" style="padding: 20px; font-size: 18px;"></div>
+
+    <!-- Simulate the same loading order as your invoice pages -->
+    <script>
+        document.getElementById('status').innerHTML += '1. Script before jQuery loads<br>';
+
+        // Try using jQuery() - should work
+        if (typeof jQuery !== 'undefined') {
+            document.getElementById('status').innerHTML += '2. ✅ jQuery is available<br>';
+        } else {
+            document.getElementById('status').innerHTML += '2. ❌ jQuery is NOT available<br>';
+        }
+
+        // Try using $ - might not work
+        if (typeof $ !== 'undefined') {
+            document.getElementById('status').innerHTML += '3. ✅ $ is available<br>';
+        } else {
+            document.getElementById('status').innerHTML += '3. ❌ $ is NOT available<br>';
+        }
+    </script>
+
+    <!-- Load jQuery (like in footer) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.getElementById('status').innerHTML += '4. Script after jQuery loads<br>';
+
+        if (typeof jQuery !== 'undefined') {
+            document.getElementById('status').innerHTML += '5. ✅ jQuery is available (version: ' + jQuery.fn.jquery + ')<br>';
+        } else {
+            document.getElementById('status').innerHTML += '5. ❌ jQuery is NOT available<br>';
+        }
+
+        if (typeof $ !== 'undefined') {
+            document.getElementById('status').innerHTML += '6. ✅ $ is available<br>';
+        } else {
+            document.getElementById('status').innerHTML += '6. ❌ $ is NOT available<br>';
+        }
+
+        // Test using jQuery() before it loads
+        document.getElementById('status').innerHTML += '<br><strong>Testing jQuery(document).ready():</strong><br>';
+
+        jQuery(document).ready(function ($) {
+            document.getElementById('status').innerHTML += '7. ✅ jQuery(document).ready() worked!<br>';
+            document.getElementById('status').innerHTML += '8. Inside ready, $ is: ' + (typeof $ !== 'undefined' ? '✅ available' : '❌ NOT available') + '<br>';
+        });
+    </script>
+</body>
+
+</html>

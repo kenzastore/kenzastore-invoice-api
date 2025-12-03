@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice API Documentation - KENZA STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            background: #2d3748;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            padding: 0 2rem;
+            overflow-x: auto;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            display: block;
+            white-space: nowrap;
+            transition: background 0.3s;
+        }
+
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: #4a5568;
+        }
+
+        .section h4 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.5rem;
+            color: #718096;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Endpoint */
+        .endpoint {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+
+        .method.get {
+            background: #48bb78;
+            color: white;
+        }
+
+        .method.post {
+            background: #4299e1;
+            color: white;
+        }
+
+        .method.put {
+            background: #ed8936;
+            color: white;
+        }
+
+        .method.delete {
+            background: #f56565;
+            color: white;
+        }
+
+        /* Code Block */
+        .code-block {
+            position: relative;
+            margin: 1rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-tabs {
+            display: flex;
+            background: #1a202c;
+            border-bottom: 1px solid #2d3748;
+            padding: 0 0.5rem;
+        }
+
+        .code-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            color: #a0aec0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .code-tab:hover {
+            color: #e2e8f0;
+        }
+
+        .code-tab.active {
+            color: #fff;
+            border-bottom-color: #4299e1;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        /* Force Dark Theme for Code */
+        pre[class*="language-"],
+        code[class*="language-"] {
+            background: #1a202c !important;
+            color: #e2e8f0 !important;
+            text-shadow: none !important;
+            font-family: 'Fira Code', 'Consolas', monospace !important;
+            font-size: 0.9rem !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+        }
+
+        /* Response Blocks */
+        .response-block {
+            margin-top: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #1a202c;
+        }
+
+        .response-block pre {
+            padding: 1.5rem !important;
+            margin: 0 !important;
+            border-radius: 8px !important;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 3.5rem;
+            right: 1rem;
+            background: #2d3748;
+            color: #fff;
+            border: 1px solid #4a5568;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: #4a5568;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th,
+        td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f7fafc;
+            font-weight: 600;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge.required {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .badge.optional {
+            background: #c6f6d5;
+            color: #2f855a;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .alert.info {
+            background: #bee3f8;
+            border-left: 4px solid #4299e1;
+            color: #2c5282;
+        }
+
+        .alert.warning {
+            background: #feebc8;
+            border-left: 4px solid #ed8936;
+            color: #7c2d12;
+        }
+
+        .alert.success {
+            background: #c6f6d5;
+            border-left: 4px solid #48bb78;
+            color: #22543d;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>📄 Invoice Management API</h1>
+        <p>Complete REST API documentation for managing invoices</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#introduction">Introduction</a>
+            <a href="#authentication">Authentication</a>
+            <a href="#endpoints">Endpoints</a>
+            <a href="#errors">Error Handling</a>
+            <a href="#examples">Examples</a>
+            <a href="#changelog">Changelog</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Introduction -->
+        <section id="introduction" class="section">
+            <h2>Introduction</h2>
+            <div class="card">
+                <p>Welcome to the Invoice Management API documentation. This RESTful API allows you to create, read,
+                    update, and delete invoices programmatically.</p>
+
+                <h3>Base URL</h3>
+                <pre><code>http://your-domain.com/api/index.php</code></pre>
+
+                <h3>Key Features</h3>
+                <ul>
+                    <li>✅ JWT-based authentication</li>
+                    <li>✅ Full CRUD operations on invoices</li>
+                    <li>✅ Automatic calculations (subtotal, tax, total)</li>
+                    <li>✅ PDF generation</li>
+                    <li>✅ Pagination support</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Authentication -->
+        <section id="authentication" class="section">
+            <h2>Authentication</h2>
+            <div class="card">
+                <p>The API uses JWT (JSON Web Tokens) for authentication. Include the token in the
+                    <code>Authorization</code> header for all protected endpoints.
+                </p>
+
+                <h3>Login</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <code>/auth/login</code>
+                </div>
+
+                <h4>Request Body</h4>
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td>string</td>
+                        <td><span class="badge required">Required</span></td>
+                        <td>User email</td>
+                    </tr>
+                    <tr>
+                        <td>password</td>
+                        <td>string</td>
+                        <td><span class="badge required">Required</span></td>
+                        <td>User password</td>
+                    </tr>
+                </table>
+
+                <div class="code-block">
+                    <div class="code-tabs">
+                        <div class="code-tab active" onclick="switchTab(event, 'login-curl')">cURL</div>
+                        <div class="code-tab" onclick="switchTab(event, 'login-js')">JavaScript</div>
+                        <div class="code-tab" onclick="switchTab(event, 'login-php')">PHP</div>
+                    </div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div id="login-curl" class="code-content active">
+                        <pre><code class="language-bash">curl -X POST http://your-domain.com/api/index.php/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "your_password"
+  }'</code></pre>
+                    </div>
+                    <div id="login-js" class="code-content">
+                        <pre><code class="language-javascript">fetch('http://your-domain.com/api/index.php/auth/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'your_password'
+  })
+})
+.then(res => res.json())
+.then(data => console.log(data.token));</code></pre>
+                    </div>
+                    <div id="login-php" class="code-content">
+                        <pre><code class="language-php">$ch = curl_init('http://your-domain.com/api/index.php/auth/login');
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'email' => 'user@example.com',
+    'password' => 'your_password'
+]));
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+echo $data['token'];</code></pre>
+                    </div>
+                </div>
+
+                <h4>Response</h4>
+                <div class="response-block">
+                    <pre><code class="language-json">{
+  "status": "success",
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+}</code></pre>
+                </div>
+
+                <div class="alert info">
+                    <strong>💡 Using the Token:</strong> Include the token in subsequent requests:
+                    <code>Authorization: Bearer YOUR_TOKEN</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Endpoints -->
+        <section id="endpoints" class="section">
+            <h2>API Endpoints</h2>
+
+            <!-- List Invoices -->
+            <div class="card">
+                <h3>List Invoices</h3>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <code>/invoices</code>
+                </div>
+
+                <h4>Query Parameters</h4>
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>page</td>
+                        <td>integer</td>
+                        <td>1</td>
+                        <td>Page number</td>
+                    </tr>
+                    <tr>
+                        <td>limit</td>
+                        <td>integer</td>
+                        <td>10</td>
+                        <td>Items per page</td>
+                    </tr>
+                </table>
+
+                <div class="code-block">
+                    <div class="code-tabs">
+                        <div class="code-tab active" onclick="switchTab(event, 'list-curl')">cURL</div>
+                        <div class="code-tab" onclick="switchTab(event, 'list-js')">JavaScript</div>
+                    </div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div id="list-curl" class="code-content active">
+                        <pre><code class="language-bash">curl -X GET "http://your-domain.com/api/index.php/invoices?page=1&limit=10" \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+                    </div>
+                    <div id="list-js" class="code-content">
+                        <pre><code class="language-javascript">fetch('http://your-domain.com/api/index.php/invoices?page=1&limit=10', {
+  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
+})
+.then(res => res.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Invoice -->
+            <div class="card">
+                <h3>Create Invoice</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <code>/invoices</code>
+                </div>
+
+                <h4>Request Body</h4>
+                <table>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>invoice_number</td>
+                        <td>string</td>
+                        <td><span class="badge required">Required</span></td>
+                        <td>Unique invoice number</td>
+                    </tr>
+                    <tr>
+                        <td>invoice_date</td>
+                        <td>date</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Invoice date (YYYY-MM-DD)</td>
+                    </tr>
+                    <tr>
+                        <td>due_date</td>
+                        <td>date</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Due date</td>
+                    </tr>
+                    <tr>
+                        <td>bill_to</td>
+                        <td>string</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Customer name</td>
+                    </tr>
+                    <tr>
+                        <td>ship_to</td>
+                        <td>string</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Shipping address</td>
+                    </tr>
+                    <tr>
+                        <td>items</td>
+                        <td>array</td>
+                        <td><span class="badge required">Required</span></td>
+                        <td>Invoice line items</td>
+                    </tr>
+                    <tr>
+                        <td>tax</td>
+                        <td>number</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Tax percentage</td>
+                    </tr>
+                    <tr>
+                        <td>discount</td>
+                        <td>number</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Discount amount</td>
+                    </tr>
+                    <tr>
+                        <td>shipping</td>
+                        <td>number</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Shipping cost</td>
+                    </tr>
+                </table>
+
+                <div class="code-block">
+                    <div class="code-tabs">
+                        <div class="code-tab active" onclick="switchTab(event, 'create-curl')">cURL</div>
+                        <div class="code-tab" onclick="switchTab(event, 'create-js')">JavaScript</div>
+                    </div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div id="create-curl" class="code-content active">
+                        <pre><code class="language-bash">curl -X POST http://your-domain.com/api/index.php/invoices \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "invoice_number": "INV-001",
+    "bill_to": "John Doe",
+    "items": [
+      {"description": "Product A", "quantity": 2, "rate": 100}
+    ],
+    "tax": 10,
+    "discount": 0,
+    "shipping": 10
+  }'</code></pre>
+                    </div>
+                    <div id="create-js" class="code-content">
+                        <pre><code class="language-javascript">fetch('http://your-domain.com/api/index.php/invoices', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    invoice_number: 'INV-001',
+    bill_to: 'John Doe',
+    items: [
+      {description: 'Product A', quantity: 2, rate: 100}
+    ],
+    tax: 10,
+    discount: 0,
+    shipping: 10
+  })
+})
+.then(res => res.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+    <!-- Get Single Invoice -->
+    <div class="card">
+        <h3>Get Single Invoice</h3>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/invoices/{id}</code>
+        </div>
+
+        <div class="code-block">
+            <div class="code-tabs">
+                <div class="code-tab active" onclick="switchTab(event, 'get-curl')">cURL</div>
+                <div class="code-tab" onclick="switchTab(event, 'get-js')">JavaScript</div>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div id="get-curl" class="code-content active">
+                <pre><code class="language-bash">curl -X GET http://your-domain.com/api/index.php/invoices/1 \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+            </div>
+            <div id="get-js" class="code-content">
+                <pre><code class="language-javascript">fetch('http://your-domain.com/api/index.php/invoices/1', {
+  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
+})
+.then(res => res.json())
+.then(data => console.log(data));</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Invoice -->
+    <div class="card">
+        <h3>Update Invoice</h3>
+        <div class="endpoint">
+            <span class="method put">PUT</span>
+            <code>/invoices/{id}</code>
+        </div>
+
+        <h4>Request Body</h4>
+        <p>Include only the fields you want to update.</p>
+
+        <div class="code-block">
+            <div class="code-tabs">
+                <div class="code-tab active" onclick="switchTab(event, 'update-curl')">cURL</div>
+                <div class="code-tab" onclick="switchTab(event, 'update-js')">JavaScript</div>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div id="update-curl" class="code-content active">
+                <pre><code class="language-bash">curl -X PUT http://your-domain.com/api/index.php/invoices/1 \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "bill_to": "Jane Doe",
+    "status": "PAID"
+  }'</code></pre>
+            </div>
+            <div id="update-js" class="code-content">
+                <pre><code class="language-javascript">fetch('http://your-domain.com/api/index.php/invoices/1', {
+  method: 'PUT',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    bill_to: 'Jane Doe',
+    status: 'PAID'
+  })
+})
+.then(res => res.json())
+.then(data => console.log(data));</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Invoice -->
+    <div class="card">
+        <h3>Delete Invoice</h3>
+        <div class="endpoint">
+            <span class="method delete">DELETE</span>
+            <code>/invoices/{id}</code>
+        </div>
+
+        <div class="code-block">
+            <div class="code-tabs">
+                <div class="code-tab active" onclick="switchTab(event, 'delete-curl')">cURL</div>
+                <div class="code-tab" onclick="switchTab(event, 'delete-js')">JavaScript</div>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div id="delete-curl" class="code-content active">
+                <pre><code class="language-bash">curl -X DELETE http://your-domain.com/api/index.php/invoices/1 \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+            </div>
+            <div id="delete-js" class="code-content">
+                <pre><code class="language-javascript">fetch('http://your-domain.com/api/index.php/invoices/1', {
+  method: 'DELETE',
+  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
+})
+.then(res => res.json())
+.then(data => console.log(data));</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generate PDF -->
+    <div class="card">
+        <h3>Generate PDF</h3>
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/invoices/{id}/generate</code>
+        </div>
+
+        <p>Generates a PDF file for the specified invoice.</p>
+
+        <div class="code-block">
+            <div class="code-tabs">
+                <div class="code-tab active" onclick="switchTab(event, 'pdf-curl')">cURL</div>
+                <div class="code-tab" onclick="switchTab(event, 'pdf-js')">JavaScript</div>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div id="pdf-curl" class="code-content active">
+                <pre><code class="language-bash">curl -X POST http://your-domain.com/api/index.php/invoices/123/generate \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+            </div>
+            <div id="pdf-js" class="code-content">
+                <pre><code class="language-javascript">fetch('http://your-domain.com/api/index.php/invoices/123/generate', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
+})
+.then(res => res.json())
+.then(data => console.log(data));</code></pre>
+            </div>
+        </div>
+
+        <h4>Response</h4>
+        <div class="response-block">
+            <pre><code class="language-json">{
+  "status": "success",
+  "message": "PDF generated successfully",
+  "pdf_url": "/invoices/INV-001.pdf",
+  "invoice_number": "INV-001"
+}</code></pre>
+        </div>
+    </div>
+    </section>
+
+    <!-- Error Handling -->
+    <section id="errors" class="section">
+        <h2>Error Handling</h2>
+        <div class="card">
+            <h3>HTTP Status Codes</h3>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>200</td>
+                    <td>Success</td>
+                </tr>
+                <tr>
+                    <td>400</td>
+                    <td>Bad Request - Invalid parameters</td>
+                </tr>
+                <tr>
+                    <td>401</td>
+                    <td>Unauthorized - Invalid or missing token</td>
+                </tr>
+                <tr>
+                    <td>404</td>
+                    <td>Not Found - Resource doesn't exist</td>
+                </tr>
+                <tr>
+                    <td>500</td>
+                    <td>Internal Server Error</td>
+                </tr>
+            </table>
+
+            <h3>Error Response Format</h3>
+            <div class="response-block">
+                <pre><code class="language-json">{
+  "status": "error",
+  "message": "Description of the error"
+}</code></pre>
+            </div>
+
+            <div class="alert warning">
+                <strong>⚠️ Common Errors:</strong>
+                <ul>
+                    <li><strong>401 Unauthorized:</strong> Check your token is valid and included in headers</li>
+                    <li><strong>400 Bad Request:</strong> Verify all required fields are provided</li>
+                    <li><strong>404 Not Found:</strong> Ensure the invoice ID exists</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples -->
+    <section id="examples" class="section">
+        <h2>Complete Examples</h2>
+        <div class="card">
+            <h3>Full Workflow Example</h3>
+            <p>Here's a complete example showing how to authenticate and create an invoice:</p>
+
+            <div class="code-block">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(event, 'example-js')">JavaScript</div>
+                    <div class="code-tab" onclick="switchTab(event, 'example-php')">PHP</div>
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div id="example-js" class="code-content active">
+                    <pre><code class="language-javascript">// Step 1: Login
+const loginResponse = await fetch('http://your-domain.com/api/index.php/auth/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'password'
+  })
+});
+const { token } = await loginResponse.json();
+
+// Step 2: Create Invoice
+const invoiceResponse = await fetch('http://your-domain.com/api/index.php/invoices', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    invoice_number: 'INV-001',
+    bill_to: 'John Doe',
+    items: [
+      { description: 'Web Development', quantity: 1, rate: 1000 }
+    ],
+    tax: 10
+  })
+});
+const invoice = await invoiceResponse.json();
+console.log('Invoice created:', invoice);</code></pre>
+                </div>
+                <div id="example-php" class="code-content">
+                    <pre><code class="language-php">&lt;?php
+// Step 1: Login
+$ch = curl_init('http://your-domain.com/api/index.php/auth/login');
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'email' => 'user@example.com',
+    'password' => 'password'
+]));
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+$token = $data['token'];
+
+// Step 2: Create Invoice
+$ch = curl_init('http://your-domain.com/api/index.php/invoices');
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'invoice_number' => 'INV-001',
+    'bill_to' => 'John Doe',
+    'items' => [
+        ['description' => 'Web Development', 'quantity' => 1, 'rate' => 1000]
+    ],
+    'tax' => 10
+]));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $token
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+echo $response;</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Changelog -->
+    <section id="changelog" class="section">
+        <h2>Changelog</h2>
+        <div class="card">
+            <h3>Version 1.0.0 (Current)</h3>
+            <ul>
+                <li>✅ Initial release</li>
+                <li>✅ JWT authentication</li>
+                <li>✅ CRUD operations for invoices</li>
+                <li>✅ PDF generation endpoint</li>
+                <li>✅ Automatic calculations</li>
+                <li>✅ Pagination support</li>
+            </ul>
+        </div>
+    </section>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 KENZA STORE Invoice API. All rights reserved.</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script>
+        function switchTab(event, tabId) {
+            const parent = event.target.closest('.code-block');
+            parent.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            parent.querySelectorAll('.code-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            parent.querySelector('#' + tabId).classList.add('active');
+        }
+
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-block');
+            const activeContent = codeBlock.querySelector('.code-content.active pre code');
+            navigator.clipboard.writeText(activeContent.textContent);
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

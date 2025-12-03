@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>API Login Test</title>
+</head>
+
+<body>
+    <h1>API Login Test</h1>
+    <button onclick="testLogin()">Test Login</button>
+    <pre id="result"></pre>
+
+    <script>
+        function testLogin() {
+            const resultEl = document.getElementById('result');
+            resultEl.textContent = 'Sending request...';
+
+            fetch('https://inv.kenzastore.my.id/api/index.php/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: 'apitest@example.com',
+                    password: 'password123'
+                })
+            })
+                .then(response => {
+                    resultEl.textContent = `HTTP Status: ${response.status}\nContent-Type: ${response.headers.get('content-type')}\n`;
+
+                    // Check if response is JSON
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        return response.text().then(text => {
+                            throw new Error(`Expected JSON but got: ${text.substring(0, 200)}...`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    resultEl.textContent += '\n' + JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    resultEl.textContent += '\n❌ Error: ' + error.message;
+                    console.error('Full error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

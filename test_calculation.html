@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Invoice Calculations</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input {
+            width: 100px;
+        }
+
+        .summary {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .amount {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Test Invoice Calculations</h1>
+
+    <div class="test-section">
+        <h2>Invoice Items</h2>
+        <table id="invoiceItems">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="items[0][description]" placeholder="Item description"
+                            value="Test Item"></td>
+                    <td><input type="number" class="quantity" name="items[0][quantity]" step="any" min="0" value="2">
+                    </td>
+                    <td><input type="number" class="rate" name="items[0][rate]" step="any" min="0" value="10"></td>
+                    <td><input type="number" class="amount" name="items[0][amount]" step="any" min="0" value="0.00"
+                            readonly></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" id="addItem">Add Item</button>
+    </div>
+
+    <div class="summary">
+        <h2>Summary</h2>
+        <div>
+            <label>Subtotal:</label>
+            <input type="text" id="subtotal" name="subtotal" value="0.00" readonly>
+        </div>
+        <div>
+            <label>Discount:</label>
+            <input type="number" id="discount" name="discount" value="0" step="any" min="0">
+        </div>
+        <div>
+            <label>Tax (%):</label>
+            <input type="number" id="tax" name="tax" value="0" step="any" min="0">
+        </div>
+        <div>
+            <label>Shipping:</label>
+            <input type="number" id="shipping" name="shipping" value="0" step="any" min="0">
+        </div>
+        <div>
+            <label>Total:</label>
+            <input type="text" id="total" name="total" value="0.00" readonly>
+        </div>
+        <div>
+            <label>Amount Paid:</label>
+            <input type="number" id="amount_paid" name="amount_paid" value="0" step="any" min="0">
+        </div>
+        <div>
+            <label>Balance Due:</label>
+            <input type="text" id="balance_due" name="balance_due" value="0.00" readonly>
+        </div>
+        <div>
+            <label>Header Total:</label>
+            <input type="text" id="header_total" value="0.00" readonly>
+        </div>
+    </div>
+
+    <script>
+        jQuery(document).ready(function ($) {
+            console.log('jQuery loaded and ready');
+
+            function parseNumber(value) {
+                console.log('parseNumber called with:', value);
+                const result = parseFloat(value) || 0;
+                console.log('parseNumber result:', result);
+                return result;
+            }
+
+            function calculateTotals() {
+                console.log('calculateTotals called');
+
+                let subtotal = 0;
+                $('.amount').each(function () {
+                    const val = parseNumber($(this).val());
+                    console.log('Adding amount:', val);
+                    subtotal += val;
+                });
+                console.log('Calculated subtotal:', subtotal);
+
+                $('#subtotal').val(subtotal.toFixed(2));
+
+                const discount = parseNumber($('#discount').val());
+                const taxRate = parseNumber($('#tax').val());
+                const shipping = parseNumber($('#shipping').val());
+
+                console.log('Discount:', discount, 'Tax Rate:', taxRate, 'Shipping:', shipping);
+
+                const taxAmount = subtotal * (taxRate / 100);
+                const total = Math.max(subtotal - discount + taxAmount + shipping, 0);
+
+                console.log('Tax amount:', taxAmount, 'Total:', total);
+
+                $('#total').val(total.toFixed(2));
+                $('#header_total').val(total.toFixed(2));
+
+                const amountPaid = parseNumber($('#amount_paid').val());
+                const balanceDue = Math.max(total - amountPaid, 0);
+
+                console.log('Amount paid:', amountPaid, 'Balance due:', balanceDue);
+
+                $('#balance_due').val(balanceDue.toFixed(2));
+            }
+
+            $(document).on('click', '#addItem', function () {
+                console.log('Add item clicked');
+                const index = $('#invoiceItems tbody tr').length;
+                console.log('New index:', index);
+
+                $('#invoiceItems tbody').append(`
+                    <tr>
+                        <td><input type="text" name="items[${index}][description]" placeholder="Item description"></td>
+                        <td><input type="number" class="quantity" name="items[${index}][quantity]" step="any" min="0" value="1"></td>
+                        <td><input type="number" class="rate" name="items[${index}][rate]" step="any" min="0" value="5"></td>
+                        <td><input type="number" class="amount" name="items[${index}][amount]" step="any" min="0" value="0.00" readonly></td>
+                    </tr>
+                `);
+
+                calculateTotals();
+            });
+
+            $(document).on('click', '.remove-item', function () {
+                const rows = $('#invoiceItems tbody tr').length;
+                if (rows > 1) {
+                    $(this).closest('tr').remove();
+                    calculateTotals();
+                }
+            });
+
+            $(document).on('input', '.quantity, .rate', function () {
+                console.log('Quantity or rate changed');
+                const row = $(this).closest('tr');
+                const quantity = parseNumber(row.find('.quantity').val());
+                const rate = parseNumber(row.find('.rate').val());
+                const amount = quantity * rate;
+                console.log('New amount:', amount);
+
+                row.find('.amount').val(amount.toFixed(2));
+                calculateTotals();
+            });
+
+            $('#discount, #tax, #shipping, #amount_paid').on('input', function () {
+                console.log('Summary field changed:', $(this).attr('id'));
+                calculateTotals();
+            });
+
+            // Initialize calculation
+            console.log('Initializing calculations...');
+            calculateTotals();
+        });
+    </script>
+</body>
+
+</html>

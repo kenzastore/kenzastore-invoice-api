@@ -1,0 +1,273 @@
+/* 
+ * Kenza Store - Modern Design System 
+ * Created: 2025
+ */
+
+:root {
+    /* Color Palette */
+    --primary-navy: #0f254a;
+    --primary-navy-soft: #1e3a8a;
+    --accent-blue: #3b82f6;
+    --accent-green: #0f9d58;
+    --accent-red: #ef4444;
+    --accent-warning: #f59e0b;
+    
+    /* Backgrounds */
+    --bg-body: #f4f6fb;
+    --bg-surface: #ffffff;
+    --bg-surface-alt: #f8fafc;
+    
+    /* Text */
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    --text-inverse: #ffffff;
+    
+    /* Borders */
+    --border-color: #e2e8f0;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 24px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    /* Transitions */
+    --transition-base: all 0.2s ease-in-out;
+}
+
+/* Dark Mode Variables */
+body.dark-mode {
+    --primary-navy: #1e293b;
+    --primary-navy-soft: #334155;
+    --bg-body: #0f172a;
+    --bg-surface: #1e293b;
+    --bg-surface-alt: #0f172a;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Global Reset & Typography */
+body {
+    font-family: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-navy);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6 {
+    color: var(--text-main);
+}
+
+a {
+    color: var(--primary-navy-soft);
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+
+a:hover {
+    color: var(--accent-blue);
+    text-decoration: none;
+}
+
+/* Layout Containers */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.card-custom {
+    background: var(--bg-surface);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Navbar Styling */
+.navbar-custom {
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-md);
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-navy) !important;
+}
+
+body.dark-mode .navbar-brand {
+    color: var(--text-main) !important;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--text-muted) !important;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-base);
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-navy) !important;
+    background: var(--bg-surface-alt);
+}
+
+body.dark-mode .nav-link:hover {
+    color: var(--text-main) !important;
+    background: rgba(255,255,255,0.05);
+}
+
+/* Buttons */
+.btn {
+    border-radius: var(--border-radius-md);
+    padding: 0.6rem 1.2rem;
+    font-weight: 500;
+    transition: var(--transition-base);
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-navy-soft);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-navy);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-success {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #0d8a4d;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-danger {
+    background-color: var(--accent-red);
+    color: white;
+}
+
+.btn-warning {
+    background-color: var(--accent-warning);
+    color: white;
+}
+
+/* Tables */
+.table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-custom th {
+    background-color: var(--bg-surface-alt);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.table-custom td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.table-custom tr:last-child td {
+    border-bottom: none;
+}
+
+.table-custom tr:hover td {
+    background-color: var(--bg-surface-alt);
+}
+
+/* Badges */
+.badge-custom {
+    padding: 0.4em 0.8em;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.025em;
+}
+
+.badge-success {
+    background-color: rgba(15, 157, 88, 0.1);
+    color: var(--accent-green);
+}
+
+.badge-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--accent-red);
+}
+
+/* Forms */
+.form-control {
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+}
+
+.form-control:focus {
+    border-color: var(--primary-navy-soft);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+/* Utilities */
+.text-navy { color: var(--primary-navy); }
+.bg-navy { background-color: var(--primary-navy); }
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.dark-mode-toggle:hover {
+    background: var(--bg-surface-alt);
+    color: var(--primary-navy);
+}
