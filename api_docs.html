@@ -325,6 +325,7 @@
             <a href="#endpoints">Endpoints</a>
             <a href="#errors">Error Handling</a>
             <a href="#examples">Examples</a>
+            <a href="#troubleshooting">Troubleshooting</a>
             <a href="#changelog">Changelog</a>
         </div>
     </nav>
@@ -339,7 +340,12 @@
                     update, and delete invoices programmatically.</p>
 
                 <h3>Base URL</h3>
-                <pre><code>http://your-domain.com/api/index.php</code></pre>
+                <pre><code>https://your-domain.com/api/index.php</code></pre>
+
+                <div class="alert info">
+                    <strong>💡 Tip:</strong> Replace <code>your-domain.com</code> with your actual domain name in all
+                    examples below.
+                </div>
 
                 <h3>Key Features</h3>
                 <ul>
@@ -396,7 +402,7 @@
                     </div>
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     <div id="login-curl" class="code-content active">
-                        <pre><code class="language-bash">curl -X POST http://your-domain.com/api/index.php/auth/login \
+                        <pre><code class="language-bash">curl -X POST https://your-domain.com/api/index.php/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -483,6 +489,7 @@ echo $data['token'];</code></pre>
                     <div class="code-tabs">
                         <div class="code-tab active" onclick="switchTab(event, 'list-curl')">cURL</div>
                         <div class="code-tab" onclick="switchTab(event, 'list-js')">JavaScript</div>
+                        <div class="code-tab" onclick="switchTab(event, 'list-php')">PHP</div>
                     </div>
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     <div id="list-curl" class="code-content active">
@@ -495,6 +502,14 @@ echo $data['token'];</code></pre>
 })
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
+                    </div>
+                    <div id="list-php" class="code-content">
+                        <pre><code class="language-php">$ch = curl_init('http://your-domain.com/api/index.php/invoices?page=1&limit=10');
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer YOUR_TOKEN']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+print_r($data);</code></pre>
                     </div>
                 </div>
             </div>
@@ -575,6 +590,7 @@ echo $data['token'];</code></pre>
                     <div class="code-tabs">
                         <div class="code-tab active" onclick="switchTab(event, 'create-curl')">cURL</div>
                         <div class="code-tab" onclick="switchTab(event, 'create-js')">JavaScript</div>
+                        <div class="code-tab" onclick="switchTab(event, 'create-php')">PHP</div>
                     </div>
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     <div id="create-curl" class="code-content active">
@@ -613,6 +629,27 @@ echo $data['token'];</code></pre>
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
                     </div>
+                    <div id="create-php" class="code-content">
+                        <pre><code class="language-php">$ch = curl_init('http://your-domain.com/api/index.php/invoices');
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'invoice_number' => 'INV-001',
+    'bill_to' => 'John Doe',
+    'items' => [
+        ['description' => 'Product A', 'quantity' => 2, 'rate' => 100]
+    ],
+    'tax' => 10,
+    'discount' => 0,
+    'shipping' => 10
+]));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer YOUR_TOKEN'
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+echo $response;</code></pre>
+                    </div>
                 </div>
             </div>
 
@@ -630,6 +667,7 @@ echo $data['token'];</code></pre>
             <div class="code-tabs">
                 <div class="code-tab active" onclick="switchTab(event, 'get-curl')">cURL</div>
                 <div class="code-tab" onclick="switchTab(event, 'get-js')">JavaScript</div>
+                <div class="code-tab" onclick="switchTab(event, 'get-php')">PHP</div>
             </div>
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <div id="get-curl" class="code-content active">
@@ -642,6 +680,14 @@ echo $data['token'];</code></pre>
 })
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
+            </div>
+            <div id="get-php" class="code-content">
+                <pre><code class="language-php">$ch = curl_init('http://your-domain.com/api/index.php/invoices/1');
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer YOUR_TOKEN']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+print_r($data);</code></pre>
             </div>
         </div>
     </div>
@@ -661,6 +707,7 @@ echo $data['token'];</code></pre>
             <div class="code-tabs">
                 <div class="code-tab active" onclick="switchTab(event, 'update-curl')">cURL</div>
                 <div class="code-tab" onclick="switchTab(event, 'update-js')">JavaScript</div>
+                <div class="code-tab" onclick="switchTab(event, 'update-php')">PHP</div>
             </div>
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <div id="update-curl" class="code-content active">
@@ -687,6 +734,21 @@ echo $data['token'];</code></pre>
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
             </div>
+            <div id="update-php" class="code-content">
+                <pre><code class="language-php">$ch = curl_init('http://your-domain.com/api/index.php/invoices/1');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'bill_to' => 'Jane Doe',
+    'status' => 'PAID'
+]));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer YOUR_TOKEN'
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+echo $response;</code></pre>
+            </div>
         </div>
     </div>
 
@@ -702,6 +764,7 @@ echo $data['token'];</code></pre>
             <div class="code-tabs">
                 <div class="code-tab active" onclick="switchTab(event, 'delete-curl')">cURL</div>
                 <div class="code-tab" onclick="switchTab(event, 'delete-js')">JavaScript</div>
+                <div class="code-tab" onclick="switchTab(event, 'delete-php')">PHP</div>
             </div>
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <div id="delete-curl" class="code-content active">
@@ -715,6 +778,15 @@ echo $data['token'];</code></pre>
 })
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
+            </div>
+            <div id="delete-php" class="code-content">
+                <pre><code class="language-php">$ch = curl_init('http://your-domain.com/api/index.php/invoices/1');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer YOUR_TOKEN']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+print_r($data);</code></pre>
             </div>
         </div>
     </div>
@@ -733,6 +805,7 @@ echo $data['token'];</code></pre>
             <div class="code-tabs">
                 <div class="code-tab active" onclick="switchTab(event, 'pdf-curl')">cURL</div>
                 <div class="code-tab" onclick="switchTab(event, 'pdf-js')">JavaScript</div>
+                <div class="code-tab" onclick="switchTab(event, 'pdf-php')">PHP</div>
             </div>
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <div id="pdf-curl" class="code-content active">
@@ -746,6 +819,15 @@ echo $data['token'];</code></pre>
 })
 .then(res => res.json())
 .then(data => console.log(data));</code></pre>
+            </div>
+            <div id="pdf-php" class="code-content">
+                <pre><code class="language-php">$ch = curl_init('http://your-domain.com/api/index.php/invoices/123/generate');
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer YOUR_TOKEN']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+print_r($data);</code></pre>
             </div>
         </div>
 
@@ -894,11 +976,64 @@ echo $response;</code></pre>
         </div>
     </section>
 
+    <!-- Troubleshooting -->
+    <section id="troubleshooting" class="section">
+        <h2>Troubleshooting</h2>
+        <div class="card">
+            <h3>Common Issues</h3>
+
+            <h4>401 Unauthorized on All Requests (Except Login)</h4>
+            <p><strong>Symptoms:</strong> Login works, but all other API calls return Unauthorized</p>
+            <p><strong>Cause:</strong> Authorization header is not reaching PHP (blocked by web server)</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Apache:</strong> Add to .htaccess:
+                    <code>SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1</code>
+                </li>
+                <li><strong>nginx:</strong> Add to PHP location block:
+                    <code>fastcgi_param HTTP_AUTHORIZATION $http_authorization;</code>
+                </li>
+            </ul>
+
+            <h4>Token Decode Failed</h4>
+            <p><strong>Symptoms:</strong> Login succeeds but token validation fails</p>
+            <p><strong>Cause:</strong> JWT_SECRET mismatch between environments</p>
+            <p><strong>Solution:</strong> Ensure your production <code>.env</code> file has the same
+                <code>JWT_SECRET</code> as development
+            </p>
+
+            <h4>CORS Errors</h4>
+            <p><strong>Symptoms:</strong> Browser blocks API requests with CORS policy error</p>
+            <p><strong>Cause:</strong> Requesting from different domain in production</p>
+            <p><strong>Solution:</strong> CORS is restricted to <code>https://inv.kenzastore.my.id</code> in production.
+                Access the API from the same domain.</p>
+
+            <h4>Test User Not Found</h4>
+            <p><strong>Symptoms:</strong> Login fails with "Invalid credentials"</p>
+            <p><strong>Solution:</strong> Run <code>tests/setup_test_user.php</code> to create the test user in your
+                database</p>
+        </div>
+    </section>
+
     <!-- Changelog -->
     <section id="changelog" class="section">
         <h2>Changelog</h2>
         <div class="card">
-            <h3>Version 1.0.0 (Current)</h3>
+            <h3>Version 1.1.0 (Current - December 2024)</h3>
+            <ul>
+                <li>✅ Environment-aware configuration (auto-detects dev/production)</li>
+                <li>✅ Enhanced Authorization header detection (Apache/nginx support)</li>
+                <li>✅ Improved JWT token validation with expiration tracking</li>
+                <li>✅ Dynamic URL configuration for subdirectory deployments</li>
+                <li>✅ CORS configuration per environment</li>
+                <li>✅ Added payment_terms field to invoice structure</li>
+                <li>✅ Debug logging for authentication troubleshooting</li>
+                <li>✅ Added PHP code examples to all API endpoints</li>
+                <li>✅ Added comprehensive Troubleshooting section</li>
+                <li>✅ Documentation updated to use generic domain placeholders</li>
+            </ul>
+
+            <h3>Version 1.0.0</h3>
             <ul>
                 <li>✅ Initial release</li>
                 <li>✅ JWT authentication</li>

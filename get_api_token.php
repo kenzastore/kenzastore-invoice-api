@@ -13,7 +13,6 @@ if (!isset($_SESSION['user_id'])) {
 
 try {
     // Generate a token for the current user
-    // Generate a token for the current user
     $issuer = 'http://localhost';
     if (file_exists(__DIR__ . '/api/config/config.php')) {
         require_once __DIR__ . '/api/config/config.php';

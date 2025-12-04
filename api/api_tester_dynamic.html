@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Invoice API Tester (Environment Aware)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+
+        input,
+        textarea {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .env-info {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .test-result {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Invoice Management API Tester (Dynamic)</h1>
+
+    <!-- Environment Detection -->
+    <div class="env-info">
+        <h3>🌍 Environment Detection</h3>
+        <div>Detected URL: <span id="detectedUrl"></span></div>
+        <div>Environment: <span id="environment"></span></div>
+        <button onclick="detectEnvironment()">Re-detect Environment</button>
+    </div>
+
+    <!-- Login Section -->
+    <div class="section">
+        <h2>1. Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" value="apitest@example.com">
+        <input type="password" id="loginPassword" placeholder="Password" value="password123">
+        <button onclick="login()">Login</button>
+        <pre id="loginResult"></pre>
+    </div>
+
+    <!-- Token Display -->
+    <div class="section">
+        <h2>Current Token</h2>
+        <input type="text" id="currentToken" placeholder="Token will appear here after login" readonly>
+    </div>
+
+    <!-- List Invoices -->
+    <div class="section">
+        <h2>2. List Invoices</h2>
+        <input type="number" id="page" placeholder="Page" value="1">
+        <input type="number" id="limit" placeholder="Limit" value="10">
+        <button onclick="listInvoices()">Get Invoices</button>
+        <pre id="listResult"></pre>
+    </div>
+
+    <!-- Create Invoice -->
+    <div class="section">
+        <h2>3. Create Invoice</h2>
+        <input type="text" id="invoiceNumber" placeholder="Invoice Number" value="INV-TEST-001">
+        <input type="date" id="invoiceDate" placeholder="Invoice Date">
+        <input type="number" id="paymentTerms" placeholder="Payment Terms (days)" value="14">
+        <input type="date" id="dueDate" placeholder="Due Date">
+        <input type="text" id="billTo" placeholder="Bill To" value="Test Customer">
+        <input type="text" id="shipTo" placeholder="Ship To" value="Test Address">
+        <textarea id="notes" placeholder="Notes (optional)" rows="3"></textarea>
+        <textarea id="items" placeholder='Items JSON' rows="5">
+[
+  {"description": "Item 1", "quantity": 2, "rate": 100},
+  {"description": "Item 2", "quantity": 1, "rate": 50}
+]</textarea>
+        <input type="number" id="tax" placeholder="Tax %" value="10">
+        <input type="number" id="discount" placeholder="Discount" value="0">
+        <input type="number" id="shipping" placeholder="Shipping" value="0">
+        <button onclick="createInvoice()">Create Invoice</button>
+        <pre id="createResult"></pre>
+    </div>
+
+    <!-- Get Single Invoice -->
+    <div class="section">
+        <h2>4. Get Invoice by ID</h2>
+        <input type="number" id="getInvoiceId" placeholder="Invoice ID">
+        <button onclick="getInvoice()">Get Invoice</button>
+        <pre id="getResult"></pre>
+    </div>
+
+    <!-- Generate PDF -->
+    <div class="section">
+        <h2>5. Generate PDF</h2>
+        <input type="number" id="generatePdfId" placeholder="Invoice ID">
+        <button onclick="generatePdf()">Generate PDF</button>
+        <pre id="generateResult"></pre>
+    </div>
+
+    <!-- Update Invoice -->
+    <div class="section">
+        <h2>6. Update Invoice</h2>
+        <input type="number" id="updateInvoiceId" placeholder="Invoice ID">
+        <input type="text" id="updateInvoiceNumber" placeholder="Invoice Number">
+        <input type="text" id="updateBillTo" placeholder="Bill To">
+        <textarea id="updateItems" placeholder='Items JSON' rows="5">
+[
+  {"description": "Updated Item", "quantity": 5, "rate": 150}
+]</textarea>
+        <button onclick="updateInvoice()">Update Invoice</button>
+        <pre id="updateResult"></pre>
+    </div>
+
+    <!-- Delete Invoice -->
+    <div class="section">
+        <h2>7. Delete Invoice</h2>
+        <input type="number" id="deleteInvoiceId" placeholder="Invoice ID">
+        <button onclick="deleteInvoice()">Delete Invoice</button>
+        <pre id="deleteResult"></pre>
+    </div>
+
+    <script>
+        // Calculate API Base URL dynamically, accounting for subdirectories
+        const getApiBaseUrl = () => {
+            const path = window.location.pathname;
+            // If we are in /kenzastore.my.id/api/api_tester_dynamic.html
+            // We want /kenzastore.my.id/api/index.php
+            
+            // Find the position of '/api/' in the path
+            const apiIndex = path.indexOf('/api/');
+            if (apiIndex !== -1) {
+                const basePath = path.substring(0, apiIndex);
+                return window.location.origin + basePath + '/api/index.php';
+            }
+            
+            // Fallback for root deployment
+            return window.location.origin + '/api/index.php';
+        };
+
+        const API_BASE = getApiBaseUrl();
+        let token = '';
+
+        // Set default dates on page load
+        window.addEventListener('DOMContentLoaded', function () {
+            detectEnvironment();
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('invoiceDate').value = today;
+            document.getElementById('dueDate').value = today;
+        });
+
+        function detectEnvironment() {
+            const detectedUrl = window.location.origin + '/api/index.php';
+
+            // More flexible environment detection
+            let environment = 'Development';
+
+            // Check for production indicators
+            const hostname = window.location.hostname;
+            const fullUrl = window.location.href;
+            const pathName = window.location.pathname;
+
+            console.log('Debug: Current hostname =', hostname);
+            console.log('Debug: Current full URL =', fullUrl);
+            console.log('Debug: Current path =', pathName);
+
+            if (
+                hostname === 'inv.kenzastore.my.id' ||
+                hostname === 'kenzastore.my.id' ||
+                fullUrl.includes('/kenzastore.my.id/') ||
+                pathName.includes('/kenzastore.my.id/') ||
+                hostname.includes('prod') ||
+                hostname.includes('production') ||
+                (hostname !== 'localhost' && hostname !== '127.0.0.1' && !hostname.includes('.local') && !hostname.includes('.test'))
+            ) {
+                environment = 'Production';
+                console.log('Debug: Detected as Production due to:',
+                    hostname === 'inv.kenzastore.my.id' ? 'hostname match' :
+                        hostname === 'kenzastore.my.id' ? 'hostname match' :
+                            fullUrl.includes('/kenzastore.my.id/') ? 'URL path match' :
+                                'other production criteria');
+            } else {
+                console.log('Debug: Detected as Development. Hostname:', hostname, 'does not match production criteria');
+            }
+
+            document.getElementById('detectedUrl').textContent = detectedUrl;
+            document.getElementById('environment').textContent = environment;
+
+            console.log('API Base URL:', API_BASE);
+            console.log('Final detection - Hostname:', hostname, 'Path:', pathName, 'Environment:', environment);
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const resultEl = document.getElementById('loginResult');
+
+            resultEl.textContent = 'Logging in...';
+
+            fetch(API_BASE + '/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    resultEl.textContent = JSON.stringify(data, null, 2);
+                    if (data.status === 'success' && data.token) {
+                        token = data.token;
+                        document.getElementById('currentToken').value = token;
+                        resultEl.className = 'success';
+                    } else {
+                        resultEl.className = 'error';
+                    }
+                })
+                .catch(error => {
+                    resultEl.textContent = 'Error: ' + error.message;
+                    resultEl.className = 'error';
+                });
+        }
+
+        function listInvoices() {
+            const page = document.getElementById('page').value;
+            const limit = document.getElementById('limit').value;
+            const resultEl = document.getElementById('listResult');
+
+            if (!token) {
+                resultEl.textContent = 'Please login first!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            resultEl.textContent = 'Loading...';
+
+            fetch(API_BASE + `/invoices?page=${page}&limit=${limit}`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    resultEl.textContent = JSON.stringify(data, null, 2);
+                    resultEl.className = data.status === 'success' ? 'success' : 'error';
+                })
+                .catch(error => {
+                    resultEl.textContent = 'Error: ' + error.message;
+                    resultEl.className = 'error';
+                });
+        }
+
+        function createInvoice() {
+            const resultEl = document.getElementById('createResult');
+
+            if (!token) {
+                resultEl.textContent = 'Please login first!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            try {
+                const invoiceData = {
+                    invoice_number: document.getElementById('invoiceNumber').value,
+                    invoice_date: document.getElementById('invoiceDate').value || new Date().toISOString().split('T')[0],
+                    payment_terms: parseInt(document.getElementById('paymentTerms').value) || 14,
+                    due_date: document.getElementById('dueDate').value || new Date().toISOString().split('T')[0],
+                    bill_to: document.getElementById('billTo').value,
+                    ship_to: document.getElementById('shipTo').value,
+                    notes: document.getElementById('notes').value,
+                    items: JSON.parse(document.getElementById('items').value),
+                    tax: parseFloat(document.getElementById('tax').value),
+                    discount: parseFloat(document.getElementById('discount').value),
+                    shipping: parseFloat(document.getElementById('shipping').value)
+                };
+
+                resultEl.textContent = 'Creating...';
+
+                fetch(API_BASE + '/invoices', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(invoiceData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        resultEl.textContent = JSON.stringify(data, null, 2);
+                        resultEl.className = data.status === 'success' ? 'success' : 'error';
+                    })
+                    .catch(error => {
+                        resultEl.textContent = 'Error: ' + error.message;
+                        resultEl.className = 'error';
+                    });
+            } catch (e) {
+                resultEl.textContent = 'Invalid JSON in items: ' + e.message;
+                resultEl.className = 'error';
+            }
+        }
+
+        function getInvoice() {
+            const id = document.getElementById('getInvoiceId').value;
+            const resultEl = document.getElementById('getResult');
+
+            if (!token) {
+                resultEl.textContent = 'Please login first!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            if (!id) {
+                resultEl.textContent = 'Please enter an invoice ID!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            resultEl.textContent = 'Loading...';
+
+            fetch(API_BASE + '/invoices/' + id, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    resultEl.textContent = JSON.stringify(data, null, 2);
+                    resultEl.className = data.status === 'success' ? 'success' : 'error';
+                })
+                .catch(error => {
+                    resultEl.textContent = 'Error: ' + error.message;
+                    resultEl.className = 'error';
+                });
+        }
+
+        function generatePdf() {
+            const id = document.getElementById('generatePdfId').value;
+            const resultEl = document.getElementById('generateResult');
+
+            if (!token) {
+                resultEl.textContent = 'Please login first!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            if (!id) {
+                resultEl.textContent = 'Please enter an invoice ID!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            resultEl.textContent = 'Generating PDF...';
+
+            fetch(API_BASE + '/invoices/' + id + '/generate', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    resultEl.textContent = JSON.stringify(data, null, 2);
+                    resultEl.className = data.status === 'success' ? 'success' : 'error';
+
+                    if (data.status === 'success' && data.pdf_url) {
+                        resultEl.textContent += '\n\nPDF URL: ' + data.pdf_url;
+                    }
+                })
+                .catch(error => {
+                    resultEl.textContent = 'Error: ' + error.message;
+                    resultEl.className = 'error';
+                });
+        }
+
+        function updateInvoice() {
+            const id = document.getElementById('updateInvoiceId').value;
+            const resultEl = document.getElementById('updateResult');
+
+            if (!token) {
+                resultEl.textContent = 'Please login first!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            if (!id) {
+                resultEl.textContent = 'Please enter an invoice ID!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            try {
+                const invoiceData = {
+                    invoice_number: document.getElementById('updateInvoiceNumber').value,
+                    bill_to: document.getElementById('updateBillTo').value,
+                    items: JSON.parse(document.getElementById('updateItems').value),
+                    payment_terms: 14
+                };
+
+                resultEl.textContent = 'Updating...';
+
+                fetch(API_BASE + '/invoices/' + id, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(invoiceData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        resultEl.textContent = JSON.stringify(data, null, 2);
+                        resultEl.className = data.status === 'success' ? 'success' : 'error';
+                    })
+                    .catch(error => {
+                        resultEl.textContent = 'Error: ' + error.message;
+                        resultEl.className = 'error';
+                    });
+            } catch (e) {
+                resultEl.textContent = 'Invalid JSON in items: ' + e.message;
+                resultEl.className = 'error';
+            }
+        }
+
+        function deleteInvoice() {
+            const id = document.getElementById('deleteInvoiceId').value;
+            const resultEl = document.getElementById('deleteResult');
+
+            if (!token) {
+                resultEl.textContent = 'Please login first!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            if (!id) {
+                resultEl.textContent = 'Please enter an invoice ID!';
+                resultEl.className = 'error';
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete invoice #' + id + '?')) {
+                return;
+            }
+
+            resultEl.textContent = 'Deleting...';
+
+            fetch(API_BASE + '/invoices/' + id, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    resultEl.textContent = JSON.stringify(data, null, 2);
+                    resultEl.className = data.status === 'success' ? 'success' : 'error';
+                })
+                .catch(error => {
+                    resultEl.textContent = 'Error: ' + error.message;
+                    resultEl.className = 'error';
+                });
+        }
+    </script>
+</body>
+
+</html>
