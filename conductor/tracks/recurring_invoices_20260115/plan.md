@@ -11,7 +11,7 @@ This plan outlines the steps to implement the recurring invoices feature, follow
     - [x] Implement CRUD logic in a new controller or helper
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Database & Model Setup' (Protocol in workflow.md)
 
-## Phase 2: API Endpoints (CRUD)
+## Phase 2: API Endpoints (CRUD) [checkpoint: f1a19c4]
 - [x] Task: Implement `POST /recurring-invoices` (Create) 6293805
     - [x] Write tests for creating a recurring schedule
     - [x] Implement endpoint in `api/index.php` and a new controller
@@ -21,16 +21,16 @@ This plan outlines the steps to implement the recurring invoices feature, follow
 - [x] Task: Implement `PUT /recurring-invoices/{id}` (Update/Pause) 6293805
     - [x] Write tests for updating status and frequency
     - [x] Implement endpoint
-- [~] Task: Conductor - User Manual Verification 'Phase 2: API Endpoints (CRUD)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: API Endpoints (CRUD)' (Protocol in workflow.md)
 
 ## Phase 3: Automated Generation Logic
-- [ ] Task: Create the generation script
-    - [ ] Write tests for the logic that selects due schedules and creates invoices
-    - [ ] Implement the script (e.g., `api/utils/process_recurring.php`)
-- [ ] Task: Integration with Logs
-    - [ ] Write tests to ensure successful generations are logged
-    - [ ] Implement logging logic
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Automated Generation Logic' (Protocol in workflow.md)
+- [x] Task: Create the generation script 6293805 e54c6f8
+    - [x] Write tests for the logic that selects due schedules and creates invoices
+    - [x] Implement the script (e.g., `api/utils/process_recurring.php`)
+- [x] Task: Integration with Logs e54c6f8
+    - [x] Write tests to ensure successful generations are logged
+    - [x] Implement logging logic
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Automated Generation Logic' (Protocol in workflow.md)
 
 ## Phase 4: Finalization & Documentation
 - [ ] Task: Documentation update
