@@ -10,7 +10,7 @@
 ## Database
 - **Type:** MySQL/MariaDB
 - **Access Layer:** PHP Data Objects (PDO) with prepared statements for security and flexibility.
-- **Schema:** Includes `recurring_invoices` for automated billing schedules.
+- **Schema:** Standardized on `invoicing_system.sql` which includes `users`, `invoices`, `invoice_items`, `logs`, and `recurring_invoices`.
 
 ## Infrastructure & Environment
 - **Environment Management:** Environment-aware configuration (dev/prod) using `.env` files and `EnvLoader`.
