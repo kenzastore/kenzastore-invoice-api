@@ -12,16 +12,16 @@ This plan outlines the steps to implement the recurring invoices feature, follow
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Database & Model Setup' (Protocol in workflow.md)
 
 ## Phase 2: API Endpoints (CRUD)
-- [ ] Task: Implement `POST /recurring-invoices` (Create)
-    - [ ] Write tests for creating a recurring schedule
-    - [ ] Implement endpoint in `api/index.php` and a new controller
-- [ ] Task: Implement `GET /recurring-invoices` (List)
-    - [ ] Write tests for listing active schedules
-    - [ ] Implement endpoint
-- [ ] Task: Implement `PUT /recurring-invoices/{id}` (Update/Pause)
-    - [ ] Write tests for updating status and frequency
-    - [ ] Implement endpoint
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: API Endpoints (CRUD)' (Protocol in workflow.md)
+- [x] Task: Implement `POST /recurring-invoices` (Create) 6293805
+    - [x] Write tests for creating a recurring schedule
+    - [x] Implement endpoint in `api/index.php` and a new controller
+- [x] Task: Implement `GET /recurring-invoices` (List) 6293805
+    - [x] Write tests for listing active schedules
+    - [x] Implement endpoint
+- [x] Task: Implement `PUT /recurring-invoices/{id}` (Update/Pause) 6293805
+    - [x] Write tests for updating status and frequency
+    - [x] Implement endpoint
+- [~] Task: Conductor - User Manual Verification 'Phase 2: API Endpoints (CRUD)' (Protocol in workflow.md)
 
 ## Phase 3: Automated Generation Logic
 - [ ] Task: Create the generation script
