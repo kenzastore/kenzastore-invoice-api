@@ -23,16 +23,16 @@ This plan outlines the steps to implement the recurring invoices feature, follow
     - [x] Implement endpoint
 - [x] Task: Conductor - User Manual Verification 'Phase 2: API Endpoints (CRUD)' (Protocol in workflow.md)
 
-## Phase 3: Automated Generation Logic
+## Phase 3: Automated Generation Logic [checkpoint: 29c013e]
 - [x] Task: Create the generation script 6293805 e54c6f8
     - [x] Write tests for the logic that selects due schedules and creates invoices
     - [x] Implement the script (e.g., `api/utils/process_recurring.php`)
 - [x] Task: Integration with Logs e54c6f8
     - [x] Write tests to ensure successful generations are logged
     - [x] Implement logging logic
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Automated Generation Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Automated Generation Logic' (Protocol in workflow.md)
 
 ## Phase 4: Finalization & Documentation
-- [ ] Task: Documentation update
-    - [ ] Update `README.md` or API docs with the new endpoints
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Finalization & Documentation' (Protocol in workflow.md)
+- [x] Task: Documentation update f99203e
+    - [x] Update `README.md` or API docs with the new endpoints
+- [~] Task: Conductor - User Manual Verification 'Phase 4: Finalization & Documentation' (Protocol in workflow.md)
