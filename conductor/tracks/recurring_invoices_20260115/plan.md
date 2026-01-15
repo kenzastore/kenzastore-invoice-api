@@ -2,14 +2,14 @@
 
 This plan outlines the steps to implement the recurring invoices feature, following the project's TDD workflow.
 
-## Phase 1: Database & Model Setup
+## Phase 1: Database & Model Setup [checkpoint: e54ab5b]
 - [x] Task: Create migration script for `recurring_invoices` table
     - [x] Define table structure (id, invoice_template_id, frequency, start_date, next_run_date, status, last_run_at)
     - [x] Implement the migration in `db/`
 - [x] Task: Create RecurringInvoice model/helper logic 6293805
     - [x] Write tests for basic CRUD operations on recurring schedules
     - [x] Implement CRUD logic in a new controller or helper
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Database & Model Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Database & Model Setup' (Protocol in workflow.md)
 
 ## Phase 2: API Endpoints (CRUD)
 - [ ] Task: Implement `POST /recurring-invoices` (Create)
