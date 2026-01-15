@@ -32,7 +32,7 @@ This plan outlines the steps to implement the recurring invoices feature, follow
     - [x] Implement logging logic
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Automated Generation Logic' (Protocol in workflow.md)
 
-## Phase 4: Finalization & Documentation
+## Phase 4: Finalization & Documentation [checkpoint: 98ce6de]
 - [x] Task: Documentation update f99203e
     - [x] Update `README.md` or API docs with the new endpoints
-- [~] Task: Conductor - User Manual Verification 'Phase 4: Finalization & Documentation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Finalization & Documentation' (Protocol in workflow.md)

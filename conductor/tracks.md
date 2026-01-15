@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Implement the "Recurring Invoices" feature**
+- [x] **Track: Implement the "Recurring Invoices" feature**
   *Link: [./tracks/recurring_invoices_20260115/](./tracks/recurring_invoices_20260115/)*
