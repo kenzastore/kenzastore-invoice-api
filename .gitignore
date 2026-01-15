@@ -68,3 +68,6 @@ build/
 
 zip/
 *.zip
+
+# connect
+db_connect.php

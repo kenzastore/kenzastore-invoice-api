@@ -1,4 +1,4 @@
-# Track recurring_invoices_20260115 Context
+# Track database_standardization_20260115 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)

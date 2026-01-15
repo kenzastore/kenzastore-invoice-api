@@ -50,7 +50,7 @@ class Config {
             
             // Determine document root dynamically or use fixed path for this specific setup
             // For http://localhost:8080/kenzastore.my.id/
-            $documentRoot = '/kenzastore.my.id'; 
+            $documentRoot = '/inv.kenzastore.my.id'; 
             
             // Use environment variables if available, otherwise fallback to computed URLs
             $apiBaseUrl = EnvLoader::get('API_BASE_URL');
