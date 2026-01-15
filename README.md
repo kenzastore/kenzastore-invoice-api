@@ -223,6 +223,40 @@ Query Parameters:
 }
 ```
 
+#### 3. Recurring Invoices
+
+**GET** `/recurring-invoices` - List recurring schedules
+
+**POST** `/recurring-invoices` - Create a recurring schedule
+
+```json
+{
+    "invoice_template_id": 123,
+    "frequency": "monthly",
+    "start_date": "2026-01-15",
+    "status": "active"
+}
+```
+
+**PUT** `/recurring-invoices/{id}` - Update a schedule
+
+```json
+{
+    "status": "paused",
+    "frequency": "annually"
+}
+```
+
+**DELETE** `/recurring-invoices/{id}` - Delete a schedule
+
+### 🤖 Automation
+
+To process recurring invoices automatically, set up a CRON job to run:
+
+```bash
+php api/utils/process_recurring.php
+```
+
 ## 🧪 Testing
 
 ### API Testing Interface
