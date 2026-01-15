@@ -80,6 +80,12 @@ switch ($resource) {
         }
         break;
 
+    case 'recurring-invoices':
+        require_once __DIR__ . '/controllers/RecurringController.php';
+        $controller = new RecurringController();
+        $controller->processRequest($_SERVER['REQUEST_METHOD'], $id);
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(['status' => 'error', 'message' => 'Resource not found: ' . $resource]);
