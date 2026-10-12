@@ -30,8 +30,8 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Application UI & Logic Integration' (Protocol in workflow.md)
 
 ## Phase 4: End-to-End Verification & Quality Assurance
-- [ ] Task: Verify PDF generation and UI responsiveness
-    - [ ] Test creating a new invoice with default logo and check generated PDF
-    - [ ] Test removing logo and check generated PDF has no logo
-    - [ ] Test updating invoice with custom logo override
+- [x] Task: Verify PDF generation and UI responsiveness
+    - [x] Test creating a new invoice with default logo and check generated PDF
+    - [x] Test removing logo and check generated PDF has no logo
+    - [x] Test updating invoice with custom logo override
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: End-to-End Verification & Quality Assurance' (Protocol in workflow.md)
