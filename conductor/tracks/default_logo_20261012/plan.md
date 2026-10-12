@@ -34,4 +34,4 @@
     - [x] Test creating a new invoice with default logo and check generated PDF
     - [x] Test removing logo and check generated PDF has no logo
     - [x] Test updating invoice with custom logo override
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: End-to-End Verification & Quality Assurance' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: End-to-End Verification & Quality Assurance' (Protocol in workflow.md)
