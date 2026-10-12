@@ -17,9 +17,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Tests for Default Logo Handling (TDD)' (Protocol in workflow.md)
 
 ## Phase 3: Application UI & Logic Integration
-- [ ] Task: Implement default logo prefill in `new_invoice.php`
-    - [ ] Update PHP logo initialization logic to fallback to `assets/images/logo-kenza-store.png`
-    - [ ] Ensure frontend state and controls (`Choose Logo`, `Remove`) reflect the active default logo
+- [x] Task: Implement default logo prefill in `new_invoice.php`
+    - [x] Update PHP logo initialization logic to fallback to `assets/images/logo-kenza-store.png`
+    - [x] Ensure frontend state and controls (`Choose Logo`, `Remove`) reflect the active default logo
 - [ ] Task: Implement default logo prefill in `update_invoice.php`
     - [ ] Update fallback logo resolution to use `assets/images/logo-kenza-store.png` when no custom logo exists
     - [ ] Ensure frontend state and controls operate identically
