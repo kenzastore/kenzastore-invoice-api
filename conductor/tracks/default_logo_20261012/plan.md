@@ -14,7 +14,7 @@
     - [x] Test case: Explicit 'removed' action leaves logo empty
     - [x] Test case: Custom upload overrides default logo
     - [x] Confirm tests fail (Red Phase) before updating application logic
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Tests for Default Logo Handling (TDD)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Tests for Default Logo Handling (TDD)' (Protocol in workflow.md)
 
 ## Phase 3: Application UI & Logic Integration
 - [ ] Task: Implement default logo prefill in `new_invoice.php`
