@@ -20,9 +20,9 @@
 - [x] Task: Implement default logo prefill in `new_invoice.php`
     - [x] Update PHP logo initialization logic to fallback to `assets/images/logo-kenza-store.png`
     - [x] Ensure frontend state and controls (`Choose Logo`, `Remove`) reflect the active default logo
-- [ ] Task: Implement default logo prefill in `update_invoice.php`
-    - [ ] Update fallback logo resolution to use `assets/images/logo-kenza-store.png` when no custom logo exists
-    - [ ] Ensure frontend state and controls operate identically
+- [x] Task: Implement default logo prefill in `update_invoice.php`
+    - [x] Update fallback logo resolution to use `assets/images/logo-kenza-store.png` when no custom logo exists
+    - [x] Ensure frontend state and controls operate identically
 - [ ] Task: Update invoice backend handlers (`generate_invoice.php` & `process_update_invoice.php`)
     - [ ] Ensure PDF generation accommodates `assets/images/logo-kenza-store.png` for Dompdf rendering
     - [ ] Handle session retention when default logo is chosen/kept

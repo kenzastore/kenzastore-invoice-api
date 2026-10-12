@@ -108,16 +108,25 @@ $logoDirAbs          = __DIR__ . '/invoices/logos';
 
 // First, check if session has a valid logo path
 $sessionLogoPath = isset($_SESSION['brand_logo_path']) ? trim((string) $_SESSION['brand_logo_path']) : '';
+$brandLogoActionSession = $_SESSION['brand_logo_action'] ?? '';
+$defaultLogoPath = 'assets/images/logo-kenza-store.png';
+$defaultLogoFullPath = __DIR__ . '/' . $defaultLogoPath;
+
 if ($sessionLogoPath !== '' && is_file(__DIR__ . '/' . $sessionLogoPath)) {
     $storedLogoPublicPath = $sessionLogoPath;
-} else {
-    // Fallback: detect based on brand name
+} elseif ($brandLogoActionSession !== 'removed') {
+    // Detect based on brand name
     foreach ($allowedLogoExts as $ext) {
         $candidate = $logoDirAbs . '/' . $logoBaseName . '.' . $ext;
         if (is_file($candidate)) {
             $storedLogoPublicPath = 'invoices/logos/' . $logoBaseName . '.' . $ext;
             break;
         }
+    }
+
+    // If still no logo, fallback to default Kenza Store logo
+    if ($storedLogoPublicPath === '' && is_file($defaultLogoFullPath) && is_readable($defaultLogoFullPath)) {
+        $storedLogoPublicPath = $defaultLogoPath;
     }
 }
 
