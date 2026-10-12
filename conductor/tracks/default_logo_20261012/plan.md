@@ -23,10 +23,10 @@
 - [x] Task: Implement default logo prefill in `update_invoice.php`
     - [x] Update fallback logo resolution to use `assets/images/logo-kenza-store.png` when no custom logo exists
     - [x] Ensure frontend state and controls operate identically
-- [ ] Task: Update invoice backend handlers (`generate_invoice.php` & `process_update_invoice.php`)
-    - [ ] Ensure PDF generation accommodates `assets/images/logo-kenza-store.png` for Dompdf rendering
-    - [ ] Handle session retention when default logo is chosen/kept
-- [ ] Task: Execute tests to verify Green phase (`tests/test_default_logo.php`)
+- [x] Task: Update invoice backend handlers (`generate_invoice.php` & `process_update_invoice.php`)
+    - [x] Ensure PDF generation accommodates `assets/images/logo-kenza-store.png` for Dompdf rendering
+    - [x] Handle session retention when default logo is chosen/kept
+- [x] Task: Execute tests to verify Green phase (`tests/test_default_logo.php`)
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Application UI & Logic Integration' (Protocol in workflow.md)
 
 ## Phase 4: End-to-End Verification & Quality Assurance

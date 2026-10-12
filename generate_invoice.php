@@ -139,25 +139,27 @@ try {
 
         // Pertahankan logo sebelumnya
         } elseif ($logoAction === 'keep') {
-            if ($sessionLogoPath !== '') {
-                $existingLogoPath = __DIR__ . '/' . $sessionLogoPath;
-                if (is_file($existingLogoPath) && is_readable($existingLogoPath)) {
-                    $fileContents = file_get_contents($existingLogoPath);
-                    if ($fileContents !== false) {
-                        $logoBinary = $fileContents;
-                        $logoFileExtension = strtolower((string) pathinfo($existingLogoPath, PATHINFO_EXTENSION)) ?: 'png';
-                        $logoMimeType = detectMimeType($existingLogoPath) ?: ($sessionLogoMime ?: ($logoFileExtension === 'svg' ? 'image/svg+xml' : 'image/' . $logoFileExtension));
-                        if ($logoMimeType !== '') {
-                            $logoDataUri = 'data:' . $logoMimeType . ';base64,' . base64_encode($fileContents);
-                        }
-                    } else {
-                        $logoAction = 'removed';
+            $defaultLogoPath = 'assets/images/logo-kenza-store.png';
+            $targetLogoPath = $sessionLogoPath !== '' ? $sessionLogoPath : $defaultLogoPath;
+            $existingLogoPath = __DIR__ . '/' . $targetLogoPath;
+
+            if (is_file($existingLogoPath) && is_readable($existingLogoPath)) {
+                $fileContents = file_get_contents($existingLogoPath);
+                if ($fileContents !== false) {
+                    $logoBinary = $fileContents;
+                    $logoFileExtension = strtolower((string) pathinfo($existingLogoPath, PATHINFO_EXTENSION)) ?: 'png';
+                    $logoMimeType = detectMimeType($existingLogoPath) ?: ($sessionLogoMime ?: ($logoFileExtension === 'svg' ? 'image/svg+xml' : 'image/' . $logoFileExtension));
+                    if ($logoMimeType !== '') {
+                        $logoDataUri = 'data:' . $logoMimeType . ';base64,' . base64_encode($fileContents);
+                    }
+                    if ($sessionLogoPath === '') {
+                        $_SESSION['brand_logo_path'] = $defaultLogoPath;
                     }
                 } else {
                     $logoAction = 'removed';
                 }
             } else {
-                $logoAction = '';
+                $logoAction = 'removed';
             }
         }
 
