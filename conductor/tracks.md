@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: from button choose logo from page new_invoice.php and update_invoice, make conductor/reference/logo kenza store.png as the default logo**
+- [x] **Track: from button choose logo from page new_invoice.php and update_invoice, make conductor/reference/logo kenza store.png as the default logo**
 *Link: [./tracks/default_logo_20261012/](./tracks/default_logo_20261012/)*
