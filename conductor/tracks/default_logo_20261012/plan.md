@@ -8,12 +8,12 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Asset Preparation & Setup' (Protocol in workflow.md)
 
 ## Phase 2: Tests for Default Logo Handling (TDD)
-- [ ] Task: Write automated test suite for logo resolution & fallback
-    - [ ] Create test script `tests/test_default_logo.php`
-    - [ ] Test case: Fresh session resolution defaults to `assets/images/logo-kenza-store.png`
-    - [ ] Test case: Explicit 'removed' action leaves logo empty
-    - [ ] Test case: Custom upload overrides default logo
-    - [ ] Confirm tests fail (Red Phase) before updating application logic
+- [x] Task: Write automated test suite for logo resolution & fallback
+    - [x] Create test script `tests/test_default_logo.php`
+    - [x] Test case: Fresh session resolution defaults to `assets/images/logo-kenza-store.png`
+    - [x] Test case: Explicit 'removed' action leaves logo empty
+    - [x] Test case: Custom upload overrides default logo
+    - [x] Confirm tests fail (Red Phase) before updating application logic
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Tests for Default Logo Handling (TDD)' (Protocol in workflow.md)
 
 ## Phase 3: Application UI & Logic Integration
