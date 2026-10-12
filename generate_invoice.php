@@ -139,25 +139,27 @@ try {
 
         // Pertahankan logo sebelumnya
         } elseif ($logoAction === 'keep') {
-            if ($sessionLogoPath !== '') {
-                $existingLogoPath = __DIR__ . '/' . $sessionLogoPath;
-                if (is_file($existingLogoPath) && is_readable($existingLogoPath)) {
-                    $fileContents = file_get_contents($existingLogoPath);
-                    if ($fileContents !== false) {
-                        $logoBinary = $fileContents;
-                        $logoFileExtension = strtolower((string) pathinfo($existingLogoPath, PATHINFO_EXTENSION)) ?: 'png';
-                        $logoMimeType = detectMimeType($existingLogoPath) ?: ($sessionLogoMime ?: ($logoFileExtension === 'svg' ? 'image/svg+xml' : 'image/' . $logoFileExtension));
-                        if ($logoMimeType !== '') {
-                            $logoDataUri = 'data:' . $logoMimeType . ';base64,' . base64_encode($fileContents);
-                        }
-                    } else {
-                        $logoAction = 'removed';
+            $defaultLogoPath = 'assets/images/logo-kenza-store.png';
+            $targetLogoPath = $sessionLogoPath !== '' ? $sessionLogoPath : $defaultLogoPath;
+            $existingLogoPath = __DIR__ . '/' . $targetLogoPath;
+
+            if (is_file($existingLogoPath) && is_readable($existingLogoPath)) {
+                $fileContents = file_get_contents($existingLogoPath);
+                if ($fileContents !== false) {
+                    $logoBinary = $fileContents;
+                    $logoFileExtension = strtolower((string) pathinfo($existingLogoPath, PATHINFO_EXTENSION)) ?: 'png';
+                    $logoMimeType = detectMimeType($existingLogoPath) ?: ($sessionLogoMime ?: ($logoFileExtension === 'svg' ? 'image/svg+xml' : 'image/' . $logoFileExtension));
+                    if ($logoMimeType !== '') {
+                        $logoDataUri = 'data:' . $logoMimeType . ';base64,' . base64_encode($fileContents);
+                    }
+                    if ($sessionLogoPath === '') {
+                        $_SESSION['brand_logo_path'] = $defaultLogoPath;
                     }
                 } else {
                     $logoAction = 'removed';
                 }
             } else {
-                $logoAction = '';
+                $logoAction = 'removed';
             }
         }
 
@@ -284,20 +286,50 @@ try {
         $amountPaid = isset($invoice['amount_paid']) ? cleanNumber($invoice['amount_paid']) : 0.0;
         $balanceDue = isset($invoice['balance_due']) ? cleanNumber($invoice['balance_due']) : max(cleanNumber($invoice['total']) - $amountPaid, 0);
 
-        $logoSlug = preg_replace('/[^A-Za-z0-9_-]/', '_', $invoice['invoice_number'] ?? '') ?: ('invoice_logo_' . $invoiceId);
+        $invoiceSlug = preg_replace('/[^A-Za-z0-9_-]/', '_', $invoice['invoice_number'] ?? '');
+        $brandSlug = preg_replace('/[^A-Za-z0-9_-]/', '_', $brandName) ?: ('invoice_logo_' . $invoiceId);
+        $logoSlug = $brandSlug ?: $invoiceSlug ?: ('invoice_logo_' . $invoiceId);
 
-        // Ambil logo dari storage (jika ada)
+        // Ambil logo dari storage / session / fallback default
         $logosDir = 'invoices/logos';
-        if (is_dir($logosDir)) {
-            foreach (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'] as $extension) {
-                $candidate = $logosDir . '/' . $logoSlug . '.' . $extension;
-                if (!is_file($candidate)) continue;
-                $fileContents = file_get_contents($candidate);
-                if ($fileContents === false) continue;
-                $mimeType = detectMimeType($candidate) ?: ($extension === 'svg' ? 'image/svg+xml' : 'image/' . $extension);
+        $allowedLogoExts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
+        $resolvedLogoPath = '';
+
+        // 1. Periksa session jika ada dan valid
+        $sessionLogo = isset($_SESSION['brand_logo_path']) ? trim((string) $_SESSION['brand_logo_path']) : '';
+        $sessionLogo = $sessionLogo !== '' ? str_replace('\\', '/', $sessionLogo) : '';
+        if ($sessionLogo !== '' && is_file(__DIR__ . '/' . $sessionLogo)) {
+            $resolvedLogoPath = __DIR__ . '/' . $sessionLogo;
+        }
+
+        // 2. Periksa invoice/brand logo di invoices/logos
+        if ($resolvedLogoPath === '' && is_dir($logosDir)) {
+            $candidatesToSearch = array_filter([$brandSlug, $invoiceSlug]);
+            foreach ($candidatesToSearch as $slugCandidate) {
+                foreach ($allowedLogoExts as $extension) {
+                    $candidate = $logosDir . '/' . $slugCandidate . '.' . $extension;
+                    if (is_file($candidate)) {
+                        $resolvedLogoPath = $candidate;
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        // 3. Fallback ke logo default Kenza Store
+        $defaultLogoRelative = 'assets/images/logo-kenza-store.png';
+        if ($resolvedLogoPath === '' && is_file(__DIR__ . '/' . $defaultLogoRelative)) {
+            $resolvedLogoPath = __DIR__ . '/' . $defaultLogoRelative;
+        }
+
+        if ($resolvedLogoPath !== '' && is_file($resolvedLogoPath)) {
+            $fileContents = @file_get_contents($resolvedLogoPath);
+            if ($fileContents !== false) {
+                $extension = strtolower(pathinfo($resolvedLogoPath, PATHINFO_EXTENSION)) ?: 'png';
+                $mimeType = detectMimeType($resolvedLogoPath) ?: ($extension === 'svg' ? 'image/svg+xml' : 'image/' . $extension);
                 $logoDataUri = 'data:' . $mimeType . ';base64,' . base64_encode($fileContents);
                 $logoFileExtension = $extension;
-                break;
+                $logoMimeType = $mimeType;
             }
         }
     } else {

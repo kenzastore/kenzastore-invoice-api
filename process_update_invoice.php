@@ -207,8 +207,9 @@ if (!empty($_FILES['brand_logo']['tmp_name']) && is_uploaded_file((string)$_FILE
 } elseif ($brandLogoAction === 'removed') {
     // keep removed flag
 } elseif ($brandLogoAction === '') {
-    // default: kalau memang sudah ada logo sebelumnya, keep
-    $brandLogoAction = $currentLogoExt !== '' ? 'keep' : '';
+    // default: kalau memang sudah ada logo sebelumnya atau session logo, keep
+    $sessionLogo = isset($_SESSION['brand_logo_path']) ? trim((string)$_SESSION['brand_logo_path']) : '';
+    $brandLogoAction = ($currentLogoExt !== '' || ($sessionLogo !== '' && is_file(__DIR__ . '/' . $sessionLogo))) ? 'keep' : '';
 }
 
 /** ======= DB Transaction ======= */

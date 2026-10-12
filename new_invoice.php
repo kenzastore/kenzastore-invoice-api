@@ -96,6 +96,9 @@ if (isset($_SESSION['store_info_prefill'])) {
     }
 }
 
+$defaultLogoPath = 'assets/images/logo-kenza-store.png';
+$defaultLogoFullPath = __DIR__ . '/' . $defaultLogoPath;
+
 $storedLogoRelative = isset($_SESSION['brand_logo_path']) ? (string) $_SESSION['brand_logo_path'] : '';
 $storedLogoRelative = trim($storedLogoRelative);
 
@@ -109,6 +112,12 @@ if ($storedLogoRelative !== '' && (!is_file($storedLogoFullPath) || !is_readable
     $storedLogoRelative = '';
     $storedLogoFullPath = '';
     unset($_SESSION['brand_logo_path'], $_SESSION['brand_logo_mime']);
+}
+
+// Fallback to default logo if no session logo is active and user didn't explicitly remove it in this session
+$brandLogoActionSession = $_SESSION['brand_logo_action'] ?? '';
+if ($storedLogoRelative === '' && $brandLogoActionSession !== 'removed' && is_file($defaultLogoFullPath) && is_readable($defaultLogoFullPath)) {
+    $storedLogoRelative = $defaultLogoPath;
 }
 
 $storedLogoPublicPath = $storedLogoRelative !== '' ? $storedLogoRelative : '';
