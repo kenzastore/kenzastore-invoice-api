@@ -115,12 +115,16 @@ $defaultLogoFullPath = __DIR__ . '/' . $defaultLogoPath;
 if ($sessionLogoPath !== '' && is_file(__DIR__ . '/' . $sessionLogoPath)) {
     $storedLogoPublicPath = $sessionLogoPath;
 } elseif ($brandLogoActionSession !== 'removed') {
-    // Detect based on brand name
-    foreach ($allowedLogoExts as $ext) {
-        $candidate = $logoDirAbs . '/' . $logoBaseName . '.' . $ext;
-        if (is_file($candidate)) {
-            $storedLogoPublicPath = 'invoices/logos/' . $logoBaseName . '.' . $ext;
-            break;
+    // Detect based on brand name or invoice number
+    $invoiceSlugCand = preg_replace('/[^A-Za-z0-9_-]/', '_', $generatedInvoiceNumber);
+    $slugCandidates = array_filter([$logoBaseName, $invoiceSlugCand]);
+    foreach ($slugCandidates as $candSlug) {
+        foreach ($allowedLogoExts as $ext) {
+            $candidate = $logoDirAbs . '/' . $candSlug . '.' . $ext;
+            if (is_file($candidate)) {
+                $storedLogoPublicPath = 'invoices/logos/' . $candSlug . '.' . $ext;
+                break 2;
+            }
         }
     }
 
